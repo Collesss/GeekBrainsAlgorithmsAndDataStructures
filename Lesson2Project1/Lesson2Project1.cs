@@ -21,7 +21,6 @@ namespace Lesson2Project1
             foreach (int item in linkedList)
                 Console.WriteLine(item);
 
-
             Node node1 = linkedList.FindNode(1);
             Node node2 = linkedList.FindNode(2);
             Node node3 = linkedList.FindNode(3);

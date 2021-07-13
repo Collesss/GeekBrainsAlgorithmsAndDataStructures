@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lesson4Project2
 {
-    static class TreeHelper
+    public static class TreeHelper
     {
         public static (int maxLenData, int maxDepth) GetMaxLenDataAndDepth<T>(TreeNode<T> node, int depth = 0)
         {
@@ -30,5 +30,9 @@ namespace Lesson4Project2
 
             return max;
         }
+
+
+        private static int GetMaxElInTreeByDepth(int depth) =>
+            (int)((uint.MaxValue) >> (31 - depth));
     }
 }

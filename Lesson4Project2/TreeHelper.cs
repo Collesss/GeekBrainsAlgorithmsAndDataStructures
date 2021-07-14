@@ -31,8 +31,18 @@ namespace Lesson4Project2
             return max;
         }
 
-
         private static int GetMaxElInTreeByDepth(int depth) =>
-            (int)((uint.MaxValue) >> (31 - depth));
+            (int)(uint.MaxValue >> (31 - depth));
+
+        private static int GetMaxElInTreeInDownByDepth(int depth) =>
+            1 << depth;
+
+
+        private static int GetSizeEl(int baseSize, int basePadding, int maxDepth, int depth)
+        {
+
+
+            return 0;
+        }
     }
 }

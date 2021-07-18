@@ -15,6 +15,6 @@ namespace Lesson4Project2
             this.Value = Value;
 
         public override bool Equals(object obj) => 
-            obj is TreeNode<T> node && Value.Equals(node.Value);
+            obj is TreeNode<T> node && (Value?.Equals(node.Value) ?? false);
     }
 }

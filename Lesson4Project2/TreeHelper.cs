@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Lesson4Project2
@@ -58,6 +59,17 @@ namespace Lesson4Project2
 
         public static string GetStringTree<T>(TreeNode<T> root)
         {
+            string NormEl<T>(TreeNode<T> value, int size, int dataSize)
+            {
+                string res = value?.Value?.ToString() ?? "-";
+
+                if (res.Length < dataSize)
+                    res = $"{new string('0', dataSize - res.Length)}{res}";
+
+                return string.Format("{0}{1}{0}", new string('_', (size - dataSize) / 2), res);
+            }
+            
+
             (int maxLenData, int maxDepth) = GetMaxLenDataAndDepth(root);
             int basePadding = 2 + maxLenData % 2;
 
@@ -75,20 +87,40 @@ namespace Lesson4Project2
             Queue<TreeNode<T>> nodes = new Queue<TreeNode<T>>();
             nodes.Enqueue(root);
 
-            for (int i = 0; i < maxDepth; i++)
+            StringBuilder result = new StringBuilder();
+
+            List<string> branch = new List<string>();
+            branch.Add("/");
+            branch.Add("\\");
+
+            for (int i = 0; i <= maxDepth; i++)
             {
                 TreeNode<T>[] t = new TreeNode<T>[1 << i];
 
-                for (int j = 0; j < 1 << i; i++)
+                for (int j = 0; j < 1 << i; j++)
                 {
                     nodes.Enqueue(nodes.Peek()?.LeftChild);
                     nodes.Enqueue(nodes.Peek()?.RightChild);
 
                     t[j] = nodes.Dequeue();
                 }
+
+
+                //result.AppendLine($"{new string(' ', lens.Peek().leftPadding)}{string.Join(new string(' ', lens.Peek().leftPadding * 2 + basePadding), t.Select(s => NormEl(s, lens.Peek().dataLen)))}");
+
+                if (i != maxDepth)
+                {
+                    result.AppendLine($"{new string(' ', lens.Peek().leftPadding)}{string.Join(new string(' ', lens.Peek().leftPadding * 2 + basePadding), t.Select(s => NormEl(s, lens.Peek().dataLen, maxLenData)))}");
+                    result.AppendLine($"{new string(' ', lens.Peek().leftPadding - 1)}{StringExtension.Join(new string[] { new string(' ', lens.Peek().dataLen), new string(' ', lens.Peek().leftPadding * 2 + basePadding - 2) }, branch)}");
+                }
+                else
+                    result.AppendLine(StringExtension.Join(new string[] { new string(' ', lens.Peek().dataLen + 2), new string(' ', basePadding) }, t.Select(s => NormEl(s, lens.Peek().dataLen, maxLenData))));
+
+                lens.Pop();
+                branch.AddRange(branch);
             }
-            
-            return null;
+
+            return result.ToString();
         }
     }
 }

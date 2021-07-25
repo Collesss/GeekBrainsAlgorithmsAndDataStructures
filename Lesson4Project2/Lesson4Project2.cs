@@ -23,12 +23,28 @@ namespace Lesson4Project2
 
             Tree<int> tree = new Tree<int>();
 
-            for (int i = 0; i < (1 << 6) - 1; i++)
+            for (int i = 0; i < (1 << 5) - 1; i++)
             {
                 tree.AddItem(i);
                 Console.WriteLine(tree.PrintTree());
             }
 
+            Console.WriteLine(new string('-', 90));
+
+            for (int i = 0; i < (1 << 5) - 1; i++)
+            {
+                Console.WriteLine(tree.GetNodeByValue(i).Value);
+            }
+
+
+            Console.WriteLine(new string('-', 90));
+
+            for (int i = 0; i < (1 << 5) - 1; i++)
+            {
+                tree.RemoveItem(i);
+                Console.WriteLine(tree.PrintTree());
+            }
+            
 
             //Console.WriteLine($"maxLenData: {maxLenData}; maxDepth: {maxDepth};");
             Console.ReadKey();

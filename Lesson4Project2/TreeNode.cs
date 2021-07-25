@@ -6,6 +6,7 @@ namespace Lesson4Project2
 {
     public class TreeNode<T>
     {
+        public TreeNode<T> Parent { get; set; }
         public T Value { get; set; }
         public TreeNode<T> LeftChild { get; set; }
         public TreeNode<T> RightChild { get; set; }

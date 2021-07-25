@@ -67,7 +67,7 @@ namespace Lesson4Project2
                 string res = value.Value?.ToString() ?? "-";
 
                 if (res.Length < dataSize)
-                    res = $"{new string('0', dataSize - res.Length)}{res}";
+                    res = $"{new string('*', dataSize - res.Length)}{res}";
 
                 return string.Format("{0}{1}{0}", new string('_', (size - dataSize) / 2), res);
             }

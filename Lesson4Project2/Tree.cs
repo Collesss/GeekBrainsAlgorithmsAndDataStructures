@@ -8,10 +8,7 @@ namespace Lesson4Project2
     {
         private TreeNode<T> root;
 
-        private TreeNode<T> leftAdd;
-        private TreeNode<T> rightAdd;
-
-        private bool addRight = false;
+        public int Count { get; private set; }
 
         public void AddItem(T value)
         {
@@ -19,31 +16,66 @@ namespace Lesson4Project2
                 root = new TreeNode<T>(value);
             else
             {
-                if (!addRight)
-                {
+                TreeNode<T> tN = root;
+                int c = Count;
 
-                }
-                else
+                while (c > 2)
                 {
-                    
+                    if ((c - 1) % 2 == 1)
+                        tN = tN.RightChild;
+                    else
+                        tN = tN.LeftChild;
+
+                    c = (c - 1) / 2;
                 }
+
+                TreeNode<T> newValue = new TreeNode<T>(value);
+
+                if (c == 1)
+                    tN.LeftChild = newValue;
+                else if (c == 2)
+                    tN.RightChild = newValue;
+                else
+                    throw new Exception("FUCK");
             }
+
+            Count++;
         }
 
         public TreeNode<T> GetNodeByValue(T value)
         {
-            throw new NotImplementedException();
+            Stack<TreeNode<T>> treeNodes = new Stack<TreeNode<T>>();
+            TreeNode<T> res = new TreeNode<T>(default);
+            if (root != null)
+                treeNodes.Push(root);
+
+            while (treeNodes.Count > 0)
+            {
+                if (treeNodes.Peek().Value.Equals(value))
+                {
+                    res = treeNodes.Peek();
+                    break;
+                }
+
+                if (treeNodes.Peek().LeftChild != null)
+                    treeNodes.Push(treeNodes.Peek().LeftChild);
+
+                if (treeNodes.Peek().RightChild != null)
+                    treeNodes.Push(treeNodes.Peek().RightChild);
+
+                treeNodes.Pop();
+            }
+
+            return res;
         }
 
-        public TreeNode<T> GetRoot()
-        {
-            throw new NotImplementedException();
-        }
 
-        public void PrintTree()
-        {
-            throw new NotImplementedException();
-        }
+
+        public TreeNode<T> GetRoot() =>
+            root;
+
+        public string PrintTree() =>
+            TreeHelper.GetStringTree(root);
 
         public void RemoveItem(T value)
         {

@@ -61,7 +61,10 @@ namespace Lesson4Project2
         {
             string NormEl<T>(TreeNode<T> value, int size, int dataSize)
             {
-                string res = value?.Value?.ToString() ?? "-";
+                if (value == null)
+                    return new string(' ', size);
+
+                string res = value.Value?.ToString() ?? "-";
 
                 if (res.Length < dataSize)
                     res = $"{new string('0', dataSize - res.Length)}{res}";
@@ -89,13 +92,17 @@ namespace Lesson4Project2
 
             StringBuilder result = new StringBuilder();
 
-            List<string> branch = new List<string>();
-            branch.Add("/");
-            branch.Add("\\");
+            List<string> branchList = new List<string>();
+            branchList.Add("/");
+            branchList.Add("\\");
+
+            (int dataLen, int leftPadding) lensBranch = (0, 0);
 
             for (int i = 0; i <= maxDepth; i++)
             {
                 TreeNode<T>[] t = new TreeNode<T>[1 << i];
+
+                string[] branch = branchList.ToArray();
 
                 for (int j = 0; j < 1 << i; j++)
                 {
@@ -103,21 +110,26 @@ namespace Lesson4Project2
                     nodes.Enqueue(nodes.Peek()?.RightChild);
 
                     t[j] = nodes.Dequeue();
-                }
 
+                    if (i != 0 && t[j] == null)
+                        branch[j] = " ";
+                }
 
                 //result.AppendLine($"{new string(' ', lens.Peek().leftPadding)}{string.Join(new string(' ', lens.Peek().leftPadding * 2 + basePadding), t.Select(s => NormEl(s, lens.Peek().dataLen)))}");
 
-                if (i != maxDepth)
+                if (i != 0)
                 {
-                    result.AppendLine($"{new string(' ', lens.Peek().leftPadding)}{string.Join(new string(' ', lens.Peek().leftPadding * 2 + basePadding), t.Select(s => NormEl(s, lens.Peek().dataLen, maxLenData)))}");
-                    result.AppendLine($"{new string(' ', lens.Peek().leftPadding - 1)}{StringExtension.Join(new string[] { new string(' ', lens.Peek().dataLen), new string(' ', lens.Peek().leftPadding * 2 + basePadding - 2) }, branch)}");
+                    result.AppendLine($"{new string(' ', lensBranch.leftPadding - 1)}{StringExtension.Join(new string[] { new string(' ', lensBranch.dataLen), new string(' ', lensBranch.leftPadding * 2 + basePadding - 2) }, branch)}");
+
+                    branchList.AddRange(branch);
                 }
+
+                if (i != maxDepth)
+                    result.AppendLine($"{new string(' ', lens.Peek().leftPadding)}{string.Join(new string(' ', lens.Peek().leftPadding * 2 + basePadding), t.Select(s => NormEl(s, lens.Peek().dataLen, maxLenData)))}");
                 else
                     result.AppendLine(StringExtension.Join(new string[] { new string(' ', lens.Peek().dataLen + 2), new string(' ', basePadding) }, t.Select(s => NormEl(s, lens.Peek().dataLen, maxLenData))));
 
-                lens.Pop();
-                branch.AddRange(branch);
+                lensBranch = lens.Pop();
             }
 
             return result.ToString();

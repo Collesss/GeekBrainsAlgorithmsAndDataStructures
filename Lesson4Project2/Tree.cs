@@ -12,32 +12,36 @@ namespace Lesson4Project2
 
         public void AddItem(T value)
         {
-            if (root == null)
-                root = new TreeNode<T>(value);
-            else
+            TreeNode<T> tN = root;
+            int c = Count;
+
+            while (c > 2)
             {
-                TreeNode<T> tN = root;
-                int c = Count;
+                c--;
 
-                while (c > 2)
-                {
-                    if ((c - 1) % 2 == 1)
-                        tN = tN.RightChild;
-                    else
-                        tN = tN.LeftChild;
-
-                    c = (c - 1) / 2;
-                }
-
-                TreeNode<T> newValue = new TreeNode<T>(value);
-                newValue.Parent = tN;
-
-                if (c == 1)
-                    tN.LeftChild = newValue;
-                else if (c == 2)
-                    tN.RightChild = newValue;
+                if (c % 2 == 1)
+                    tN = tN.RightChild;
                 else
-                    throw new Exception("Alg error");
+                    tN = tN.LeftChild;
+
+                c /= 2;
+            }
+
+            TreeNode<T> newValue = new TreeNode<T>(value, tN);
+
+            switch (c)
+            {
+                case 0:
+                    root = newValue;
+                    break;
+                case 1:
+                    tN.LeftChild = newValue;
+                    break;
+                case 2:
+                    tN.RightChild = newValue;
+                    break;
+                default:
+                    throw new Exception("Alg error or tree will modifed not in class");
             }
 
             Count++;
@@ -70,16 +74,16 @@ namespace Lesson4Project2
             return res;
         }
 
-        public bool GetNodeByValue(T value, out TreeNode<T> result)
+        public bool TryGetNodeByValue(T value, out TreeNode<T> result)
         {
             Queue<TreeNode<T>> treeNodes = new Queue<TreeNode<T>>();
-            result = new TreeNode<T>(default);
+            result = null;
             if (root != null)
                 treeNodes.Enqueue(root);
 
             while (treeNodes.Count > 0)
             {
-                if (treeNodes.Peek().Value.Equals(value))
+                if (value.Equals(treeNodes.Peek().Value))
                 {
                     result = treeNodes.Peek();
                     return true;
@@ -124,7 +128,7 @@ namespace Lesson4Project2
             }
             */
 
-            if (GetNodeByValue(value, out TreeNode<T> removeEl))
+            if (TryGetNodeByValue(value, out TreeNode<T> removeEl))
             {
                 TreeNode<T> lastAddEl = LastAddEl();
 
@@ -185,17 +189,19 @@ namespace Lesson4Project2
 
             while (c > 2)
             {
-                if ((c - 1) % 2 == 1)
+                c--;
+
+                if (c % 2 == 1)
                     tN = tN.RightChild;
                 else
                     tN = tN.LeftChild;
 
-                c = (c - 1) / 2;
+                c /= 2;
             }
 
             return c switch
             {
-                0 => root,
+                0 => tN,
                 1 => tN.LeftChild,
                 2 => tN.RightChild,
                 _ => throw new Exception("Alg error")

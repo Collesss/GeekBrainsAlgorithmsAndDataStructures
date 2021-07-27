@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lesson4Project2
 {
-    class Tree<T> : ITree<T>
+    public class Tree<T> : ITree<T>
     {
         private TreeNode<T> root;
 

@@ -43,8 +43,36 @@ namespace Lesson4Project2
             {
                 tree.RemoveItem(i);
                 Console.WriteLine(tree.PrintTree());
+                Console.WriteLine(tree.Count);
             }
-            
+
+            Console.WriteLine(new string('-', 90));
+
+            for (int i = 0; i < (1 << 5) - 1; i++)
+            {
+                tree.AddItem(i);
+                Console.WriteLine(tree.PrintTree());
+                Console.WriteLine(tree.Count);
+            }
+
+            Console.WriteLine(new string('-', 90));
+
+
+            for (int i = 0; i < (1 << 4) - 1; i++)
+            {
+                tree.RemoveItem(i);
+                Console.WriteLine(tree.PrintTree());
+                Console.WriteLine(tree.Count);
+            }
+
+            Console.WriteLine(new string('-', 90));
+
+            for (int i = 0; i < (1 << 3) - 1; i++)
+            {
+                tree.AddItem(i);
+                Console.WriteLine(tree.PrintTree());
+                Console.WriteLine(tree.Count);
+            }
 
             //Console.WriteLine($"maxLenData: {maxLenData}; maxDepth: {maxDepth};");
             Console.ReadKey();

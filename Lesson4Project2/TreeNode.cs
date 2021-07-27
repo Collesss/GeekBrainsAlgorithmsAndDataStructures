@@ -20,7 +20,7 @@ namespace Lesson4Project2
 
         public void Replace(TreeNode<T> whatOnReplace)
         {
-            if (whatOnReplace != null)
+            if (this != whatOnReplace)
             {
                 if (Parent != null)
                 {
@@ -36,29 +36,13 @@ namespace Lesson4Project2
                 if (RightChild != null)
                     RightChild.Parent = whatOnReplace;
 
-                whatOnReplace.Parent = Parent;
-                whatOnReplace.LeftChild = LeftChild;
-                whatOnReplace.RightChild = RightChild;
-
-
+                if (whatOnReplace != null)
+                {
+                    whatOnReplace.Parent = Parent;
+                    whatOnReplace.LeftChild = LeftChild;
+                    whatOnReplace.RightChild = RightChild;
+                }
             }
-        }
-
-        public void RemoveInTree()
-        {
-            if (Parent != null)
-            {
-                if (Parent.LeftChild == this)
-                    Parent.LeftChild = null;
-                else if (Parent.RightChild == this)
-                    Parent.RightChild = null;
-            }
-
-            if (LeftChild != null)
-                LeftChild.Parent = null;
-
-            if (RightChild != null)
-                RightChild.Parent = null;
         }
 
         public override bool Equals(object obj) => 

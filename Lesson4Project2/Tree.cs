@@ -12,20 +12,13 @@ namespace Lesson4Project2
 
         public void AddItem(T value)
         {
-            TreeNode<T> tN = root;
-            int c = Count;
+            TreeNode<T> tN;
+            int c;
 
-            while (c > 2)
-            {
-                c--;
-
-                if (c % 2 == 1)
-                    tN = tN.RightChild;
-                else
-                    tN = tN.LeftChild;
-
-                c /= 2;
-            }
+            for (c = Count, tN = root; c > 2; 
+                c--, 
+                tN = (c & 1) == 1 ? tN.RightChild : tN.LeftChild, 
+                c /= 2);
 
             TreeNode<T> newValue = new TreeNode<T>(value, tN);
 
@@ -74,7 +67,7 @@ namespace Lesson4Project2
             return res;
         }
 
-        public bool TryGetNodeByValue(T value, out TreeNode<T> result)
+        public bool TryGetNodeByValue(T value, /*[System.Diagnostics.CodeAnalysis.NotNullWhen(true)]*/ out TreeNode<T> result)
         {
             Queue<TreeNode<T>> treeNodes = new Queue<TreeNode<T>>();
             result = null;
@@ -109,29 +102,20 @@ namespace Lesson4Project2
 
         public void RemoveItem(T value)
         {
-            /*
-            bool ReplaceInParent(TreeNode<T> node, TreeNode<T> nodeReplace = null)
-            {
-                if (node.Parent != null)
-                {
-                    TreeNode<T> nodeParent = node.Parent;
-
-                    if (nodeParent.LeftChild == node)
-                        nodeParent.LeftChild = nodeReplace;
-                    else if (nodeParent.RightChild == node)
-                        nodeParent.RightChild = nodeReplace;
-
-                    return true;
-                }
-
-                return false;
-            }
-            */
-
             if (TryGetNodeByValue(value, out TreeNode<T> removeEl))
             {
                 TreeNode<T> lastAddEl = LastAddEl();
 
+                lastAddEl.Replace(null);
+                removeEl.Replace(lastAddEl);
+
+                if (root == removeEl)
+                    root = removeEl != lastAddEl ? lastAddEl : null;
+
+                Count--;
+
+                #region v1
+                /*
                 if (lastAddEl != removeEl)
                 {
                     TreeNode<T> addLastAddElParent = lastAddEl.Parent;
@@ -177,27 +161,20 @@ namespace Lesson4Project2
                     removeEl.RightChild.Parent = lastAddEl;
 
                 removeEl.Parent = removeEl.LeftChild = removeEl.RightChild = null;
-
-                Count--;
+                */
+                #endregion
             }
         }
 
         private TreeNode<T> LastAddEl()
         {
-            TreeNode<T> tN = root;
-            int c = Count - 1;
+            TreeNode<T> tN;
+            int c;
 
-            while (c > 2)
-            {
-                c--;
-
-                if (c % 2 == 1)
-                    tN = tN.RightChild;
-                else
-                    tN = tN.LeftChild;
-
-                c /= 2;
-            }
+            for (c = Count - 1, tN = root; c > 2; 
+                c--, 
+                tN = (c & 1) == 1 ? tN.RightChild : tN.LeftChild, 
+                c /= 2) ;
 
             return c switch
             {

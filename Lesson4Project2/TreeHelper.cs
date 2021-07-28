@@ -32,6 +32,7 @@ namespace Lesson4Project2
             return max;
         }
 
+        /*
         private static int GetMaxElInTreeByDepth(int depth) =>
             (int)(uint.MaxValue >> (31 - depth));
 
@@ -40,7 +41,9 @@ namespace Lesson4Project2
 
         private static int GetPaddingBetweenEl(int baseSize, int basePadding, int maxDepth, int depth) =>
             (baseSize * 2 + basePadding) * (int)Math.Pow(2, maxDepth - depth) - (baseSize * 2);
+        */
 
+        /*
         private static int GetSizeEl(int baseSize, int basePadding, int maxDepth, int depth)
         {
             if (depth >= maxDepth - 1)
@@ -56,6 +59,7 @@ namespace Lesson4Project2
 
             return countElInDownLine * baseSize + countLongPad * longPadding + countShortPad * basePadding - (baseSize - baseSize % 2);
         }
+        */
 
         public static string GetStringTree<T>(TreeNode<T> root)
         {
@@ -67,7 +71,7 @@ namespace Lesson4Project2
                 string res = value.Value?.ToString() ?? "-";
 
                 if (res.Length < dataSize)
-                    res = $"{new string('0', dataSize - res.Length)}{res}";
+                    res = $"{new string('*', dataSize - res.Length)}{res}";
 
                 return string.Format("{0}{1}{0}", new string('_', (size - dataSize) / 2), res);
             }

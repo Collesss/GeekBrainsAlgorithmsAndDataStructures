@@ -7,51 +7,68 @@ namespace Lesson6Project1
 {
     public static class Graph
     {
+        private class LinkedNode
+        {
+            public int Count { get; private set; } = 1;
+            public int Value { get; set; }
+            public LinkedNode LastNode { get; private set; }
+
+            public LinkedNode(){ }
+
+            public LinkedNode(int Value) =>
+                this.Value = Value;
+
+            public LinkedNode(int Value, LinkedNode LastNode) : this(Value)
+            {
+                this.LastNode = LastNode;
+                Count = LastNode.Count + 1;
+            }
+
+            public bool Contains(int Value) =>
+                this.Value == Value ? true : (LastNode?.Contains(Value) ?? false);
+
+            public static int[] GetArray(LinkedNode linkedNode)
+            {
+                int[] result = new int[linkedNode?.Count ?? 0];
+
+                LinkedNode node;
+                int i;
+                
+                for (node = linkedNode, i = 1; node != null; node = node.LastNode, i++)
+                    result[^i] = node.Value;
+
+                return result;
+            }
+        }
+
         public static int[] FindShortWayGraph(int[,] matrixWeights, int start, int end)
         {
-            List<(int[] way, int len)> result = new List<(int[] way, int len)>();
+            (LinkedNode way, int len) resultWay = (null, int.MaxValue);
 
-            Queue<(int vertex, int[] way, int len)> waves = new Queue<(int vertex, int[] way, int len)>();
+            Queue<(LinkedNode way, int len)> waves = new Queue<(LinkedNode way, int len)>();
 
-            
-            int maxLenWay = 0;
-
-            for (int i = 0; i < matrixWeights.GetLength(0); i++)
-                for (int j = 0; j < matrixWeights.GetLength(0); j++)
-                    if (matrixWeights[i, j] != int.MaxValue)
-                        maxLenWay++;
-
-            maxLenWay--;
-
-            waves.Enqueue((start, new int[] { start }, 0));
+            waves.Enqueue((new LinkedNode(start), 0));
 
             while (waves.Count > 0)
             {
-                (int vertex, int[] way, int len) vertex = waves.Dequeue();
+                (LinkedNode way, int len) vertex = waves.Dequeue();
 
-                if (vertex.way[vertex.way.Length - 1] == end)
+                if (vertex.way.Value == end)
                 {
-                    result.Add((vertex.way, vertex.len));
+                    if (vertex.len < resultWay.len)
+                        resultWay = vertex;
+
                     continue;
                 }
-
-                if (vertex.way.Length == maxLenWay)
-                    continue;
 
                 for (int i = 0; i < matrixWeights.GetLength(0); i++)
-                {
-                    if (vertex.vertex != i && !vertex.way.Contains(i) && matrixWeights[vertex.vertex, i] != int.MaxValue)
-                    {
-                        int[] newWay = new int[vertex.way.Length + 1];
-                        vertex.way.CopyTo(newWay, 0);
-                        newWay[newWay.Length - 1] = i;
-
-                        waves.Enqueue((i, newWay, vertex.len + matrixWeights[vertex.vertex, i]));
-                    }
-                }
+                    if (!vertex.way.Contains(i) && matrixWeights[vertex.way.Value, i] != int.MaxValue)
+                        waves.Enqueue((new LinkedNode(i, vertex.way), vertex.len + matrixWeights[vertex.way.Value, i]));
             }
 
-            return result.OrderBy(a => a.len).Select(el => el.way).FirstOrDefault() ?? new int[0];
+            return LinkedNode.GetArray(resultWay.way);
+
+            //return result.OrderBy(a => a.len).Select(el => el.way).FirstOrDefault() ?? new int[0];
         }
 
     }

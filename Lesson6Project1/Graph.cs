@@ -70,5 +70,21 @@ namespace Lesson6Project1
 
             //return result.OrderBy(a => a.len).Select(el => el.way).FirstOrDefault() ?? new int[0];
         }
+    
+        public static string BreadthFirst(int[,] matrix, int start)
+        {
+            char GetLetter(int i) =>
+                (char)(65 + i);
+
+            HashSet<int> beforeWave = new HashSet<int>();
+            HashSet<int> currentWave = new HashSet<int>();
+            HashSet<int> afterWave = new HashSet<int>(Enumerable.Range(0, matrix.GetLength(0)));
+
+            StringBuilder builder = new StringBuilder();
+
+
+
+            return null;
+        }
     }
 } 

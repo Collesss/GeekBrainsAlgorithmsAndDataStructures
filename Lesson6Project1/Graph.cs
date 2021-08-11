@@ -70,6 +70,5 @@ namespace Lesson6Project1
 
             //return result.OrderBy(a => a.len).Select(el => el.way).FirstOrDefault() ?? new int[0];
         }
-
     }
 } 

@@ -8,6 +8,10 @@ namespace Lesson6Project1
         static void Main(string[] args)
         {
 
+
+
+
+
             //A, B, C, D
 
             int n = int.MaxValue;
@@ -29,6 +33,9 @@ namespace Lesson6Project1
             string[] graph = new string[] { "A", "B", "C", "D", "E", "F", "G", "H" };
 
             Console.WriteLine(string.Join("->", Graph.FindShortWayGraph(matrixWeights, 3, 2).Select(d => graph[d])));
+            Console.WriteLine(Graph.BreadthFirst(matrixWeights, 3));
+            Console.WriteLine(Graph.DeepFirst(matrixWeights, 3));
+            Console.WriteLine(Graph.DeepFirstV2(matrixWeights, 3));
             Console.ReadKey();
         }
     }

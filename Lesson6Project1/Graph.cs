@@ -73,18 +73,55 @@ namespace Lesson6Project1
     
         public static string BreadthFirst(int[,] matrix, int start)
         {
-            char GetLetter(int i) =>
-                (char)(65 + i);
-
             HashSet<int> beforeWave = new HashSet<int>();
-            HashSet<int> currentWave = new HashSet<int>();
-            HashSet<int> afterWave = new HashSet<int>(Enumerable.Range(0, matrix.GetLength(0)));
+            Queue<int> currentWave = new Queue<int>();
+            beforeWave.Add(start);
+            currentWave.Enqueue(start);
 
-            StringBuilder builder = new StringBuilder();
+            while (currentWave.Count > 0)
+                for (int i = 0, currentVertex = currentWave.Dequeue(); i < matrix.GetLength(0); i++)
+                    if (matrix[currentVertex, i] != int.MaxValue && beforeWave.Add(i))
+                        currentWave.Enqueue(i);
 
+            return new string(beforeWave.Select(el => (char)(65 + el)).ToArray());
+        }
 
+        public static string DeepFirst(int[,] matrix, int start)
+        {
+            HashSet<int> beforeWave = new HashSet<int>();
+            Stack<int> currentWave = new Stack<int>();
+            beforeWave.Add(start);
+            currentWave.Push(start);
+            List<int> result = new List<int>();
 
-            return null;
+            while (currentWave.Count > 0)
+            {
+                result.Add(currentWave.Peek());
+                for (int i = 0, currentVertex = currentWave.Pop(); i < matrix.GetLength(0); i++)
+                    if (matrix[currentVertex, i] != int.MaxValue && beforeWave.Add(i))
+                        currentWave.Push(i);
+            }
+
+            return new string(result.Select(el => (char)(65 + el)).ToArray());
+        }
+
+        public static string DeepFirstV2(int[,] matrix, int start)
+        {
+            HashSet<int> beforeWave = new HashSet<int>();
+            Stack<int> currentWave = new Stack<int>();
+            beforeWave.Add(start);
+            currentWave.Push(start);
+
+            while (currentWave.Count > 0)
+                for (int i = 0, currentVertex = currentWave.Pop(); i < matrix.GetLength(0); i++)
+                    if (matrix[currentVertex, i] != int.MaxValue && beforeWave.Add(i))
+                    {
+                        currentWave.Push(currentVertex);
+                        currentWave.Push(i);
+                        break;
+                    }
+
+            return new string(beforeWave.Select(el => (char)(65 + el)).ToArray());
         }
     }
 } 
